@@ -13,9 +13,11 @@
       "type": "git",
       "url": "git+https://github.com/YaakovHatam/download-npm-packages.git"
    },
-   "keywords": [],
-   "author": "https://github.com/YaakovHatam",
-   "license": "ISC",
+   "keywords": [
+      "npm"
+   ],
+   "author": "YaakovHatam",
+   "license": "MIT",
    "bugs": {
       "url": "https://github.com/YaakovHatam/download-npm-packages/issues"
    },
