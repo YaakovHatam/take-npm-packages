@@ -1,15 +1,24 @@
 {
   "name": "download-npm-pacakges",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "commonjs",
+  "bin": {
+    "download-npm-pacakges": "bin/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "YaakovHatam",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YaakovHatam/download-npm-pacakges.git"
+  },
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bin": {
-    "download": "bin/index.js"
-  }
+  "bugs": {
+    "url": "https://github.com/YaakovHatam/download-npm-pacakges/issues"
+  },
+  "homepage": "https://github.com/YaakovHatam/download-npm-pacakges#readme",
+  
 }
