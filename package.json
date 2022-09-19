@@ -1,15 +1,15 @@
 {
-   "name": "@yaakovhatam/download-npm-packages",
+   "name": "@yaakovhatam/take-npm-packages",
    "version": "1.0.0",
    "description": "Helper for downloading npm .tgz pacakges to a directory for offline use",
    "main": "index.js",
    "bin": {
-      "download-npm-pacakges": "bin/index.js"
+      "take-npm-packages": "bin/index.js"
    },
    "scripts": {},
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/YaakovHatam/download-npm-packages.git"
+      "url": "git+https://github.com/YaakovHatam/take-npm-packages.git"
    },
    "keywords": [
       "npm"
@@ -17,7 +17,7 @@
    "author": "YaakovHatam",
    "license": "MIT",
    "bugs": {
-      "url": "https://github.com/YaakovHatam/download-npm-packages/issues"
+      "url": "https://github.com/YaakovHatam/take-npm-packages/issues"
    },
-   "homepage": "https://github.com/YaakovHatam/download-npm-packages#readme"
+   "homepage": "https://github.com/YaakovHatam/take-npm-packages#readme"
 }
