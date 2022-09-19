@@ -8,5 +8,5 @@ if (!packages) {
    return process.exit(1)
 }
 
-const op = Number(argv[2]);
+const op = Number(process.argv[2]);
 downloader(op);
