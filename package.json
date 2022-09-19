@@ -1,6 +1,6 @@
 {
    "name": "@yaakovhatam/take-npm-packages",
-   "version": "1.0.3",
+   "version": "1.0.4",
    "description": "Helper for downloading npm .tgz pacakges to a directory for offline use",
    "main": "index.js",
    "bin": {
