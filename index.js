@@ -46,7 +46,7 @@ async function listPackaes() {
    return flattedPackagesFile;
 }
 
-async function download(packagesDir) {
+async function download() {
    const packagesList = require(flattedPackagesFile);
 
    if (!fs.existsSync(packagesDir)) {
