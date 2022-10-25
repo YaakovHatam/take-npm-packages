@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 const path = require('path');
-const downloader = require('../index');
+const ops = require('../index');
 
 var yargs = require('yargs/yargs')(process.argv.slice(2))
    .usage('Usage: npx @yaakovhatam/take-npm-packages [options]')
@@ -18,4 +18,8 @@ if (!packages) {
    return process.exit(1)
 }
 
-downloader(yargs.argv).then(() => process.exit(0)).catch(err => console.error(err));
+
+ops.listPackaes()
+   .then(() => yargs.argv.download ? ops.download() : null)
+   .then(() => yargs.argv.integrity ? ops.integrityCheck() : null)
+   .then(() => process.exit(0)).catch(err => console.error(err));

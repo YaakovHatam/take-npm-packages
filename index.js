@@ -38,33 +38,43 @@ function checkIntegrity(packagesList) {
 
 }
 
-async function operate(args) {
+async function listPackaes() {
    const packagesList = getAllLinks(packages);
-
    fs.writeFileSync(flattedPackagesFile, JSON.stringify(packagesList));
    console.log('total of', packagesList.length, 'packages');
-
-   if (args.download) {
-
-      if (!fs.existsSync(packagesDir)) {
-         fs.mkdirSync(packagesDir);
-      }
-
-      const files = fs.readdirSync(packagesDir, { withFileTypes: true }).filter(f => f.isFile()).map(f => f.name);
-
-      const filteredPackagesList = packagesList
-         .map(p => p.resolved)
-         .filter(Boolean)
-         .filter(p => !files.includes(saveFilePath('', p)));
-
-      console.log('total of', filteredPackagesList.length, 'to download');
-      const res = await downloadPackages(filteredPackagesList, packagesDir);
-      console.log(res)
-   }
-   if (args.download && args.integrity) {
-      const packagesListHasIntegrity = packagesList.filter(p => p.integrity && p.resolved);
-      checkIntegrity(packagesListHasIntegrity);
-   }
+   console.log('saved under', flattedPackagesFile);
+   return flattedPackagesFile;
 }
 
-module.exports = operate;
+async function download(packagesDir) {
+   const packagesList = require(flattedPackagesFile);
+
+   if (!fs.existsSync(packagesDir)) {
+      fs.mkdirSync(packagesDir);
+   }
+
+   const files = fs.readdirSync(packagesDir, { withFileTypes: true }).filter(f => f.isFile()).map(f => f.name);
+
+   const filteredPackagesList = packagesList
+      .map(p => p.resolved)
+      .filter(Boolean)
+      .filter(p => !files.includes(saveFilePath('', p)));
+
+   console.log('total of', filteredPackagesList.length, 'to download');
+   return downloadPackages(filteredPackagesList, packagesDir);
+}
+
+async function integrityCheck() {
+   const packagesList = require(flattedPackagesFile);
+
+   const packagesListHasIntegrity = packagesList.filter(p => p.integrity && p.resolved);
+   checkIntegrity(packagesListHasIntegrity);
+   return '';
+
+}
+
+module.exports = {
+   listPackaes,
+   download,
+   integrityCheck
+};

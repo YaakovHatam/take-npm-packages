@@ -22,7 +22,7 @@ function downloadFile(url, filePath) {
          file.on('error', () => fs.unlink(filePath));
       }).end();
 
-      request.on('finish', () => resolve('downloaded'));
+      request.on('finish', () => resolve(url, 'downloaded'));
       request.on('error', err => reject(err.message));
    })
 }
