@@ -62,8 +62,8 @@ async function operate(args) {
       console.log(res)
    }
    if (args.download && args.integrity) {
-      const packagesList = packagesList.filter(p => p.integrity && p.resolved);
-      checkIntegrity(packagesList);
+      const packagesListHasIntegrity = packagesList.filter(p => p.integrity && p.resolved);
+      checkIntegrity(packagesListHasIntegrity);
    }
 }
 
