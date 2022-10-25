@@ -1,16 +1,16 @@
 #! /usr/bin/env node
 const path = require('path');
 const downloader = require('../index');
-var argv = require('yargs/yargs')(process.argv.slice(2))
+
+var yargs = require('yargs/yargs')(process.argv.slice(2))
    .usage('Usage: npx @yaakovhatam/take-npm-packages [options]')
    .example('npx @yaakovhatam/take-npm-packages', 'list all packages from package-lock.json')
    .example('npx @yaakovhatam/take-npm-packages -d', 'download all packages from package-lock.json')
    .example('npx @yaakovhatam/take-npm-packages -d -i', 'download all packages from package-lock.json and check integrity')
    .alias('d', 'download')
-   .alias('i', 'integrity')
-   .argv;
+   .alias('i', 'integrity');
 
-console.log(argv);
+yargs.showVersion(m => console.log(`Running version ${m}`));
 
 const packages = require(path.join(process.cwd(), './package-lock.json'));
 if (!packages) {
@@ -18,4 +18,4 @@ if (!packages) {
    return process.exit(1)
 }
 
-downloader(argv).then(() => process.exit(0)).catch(err => console.error(err));
+downloader(yargs.argv).then(() => process.exit(0)).catch(err => console.error(err));
