@@ -21,5 +21,6 @@ if (!packages) {
 
 ops.listPackaes()
    .then(() => yargs.argv.download ? ops.download() : null)
+   .then(res => console.log(res))
    .then(() => yargs.argv.integrity ? ops.integrityCheck() : null)
    .then(() => process.exit(0)).catch(err => console.error(err));

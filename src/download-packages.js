@@ -5,29 +5,40 @@ const saveFilePath = require('./common').saveFilePath;
 
 function downloadFile(url, filePath) {
    return new Promise((resolve, reject) => {
-      const request = https.get(url, function (response) {
 
+      const file = fs.createWriteStream(filePath);
+
+      const request = https.get(url, function (response) {
          if (response.statusCode == 302) {
             console.log(response.statusCode + ': ' + url);
+            fs.unlinkSync(filePath);
             return downloadFile(response.headers.location, filePath);
          }
          if (response.statusCode == 404) {
+            fs.unlinkSync(filePath);
             return reject(response.statusCode + ': ' + url);
          }
-
-         const file = fs.createWriteStream(filePath);
          response.pipe(file);
-
-         file.on('finish', () => file.close());
-         file.on('error', () => fs.unlink(filePath));
       }).end();
 
-      request.on('finish', () => resolve(url, 'downloaded'));
-      request.on('error', err => reject(err.message));
+      file.on('finish', () => {
+         file.close();
+         resolve('downloaded: ' + url);
+      });
+
+      file.on('error', () => {
+         fs.unlinkSync(filePath);
+         reject('file error')
+      });
+
+      request.on('error', err => {
+         reject(err.message)
+      });
    })
 }
 
 function shuffle(array) {
+   return array;
    let currentIndex = array.length, randomIndex;
 
    // While there remain elements to shuffle.
