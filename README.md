@@ -1,8 +1,18 @@
 # take-npm-packages
 
+## What is this?
+This tool is a simple script that takes a list of npm packages and installs them in a directory of your choice.
 
-First step: npx @yaakovhatam/take-npm-packages 1
+## Command
 
-Second step: npx @yaakovhatam/take-npm-packages 2
+`npx @yaakovhatam/take-npm-packages [options]`
+- `options: download (alias: d)` - downloads the packages to the current directory
+- `options: integrity (alias: i)` - checks the integrity of the packages downloaded in the current directory
 
-Third step: npx @yaakovhatam/take-npm-packages 3
+## Usage examples
+
+`npx @yaakovhatam/take-npm-packages` - list all packages from package-lock.json
+
+`npx @yaakovhatam/take-npm-packages -d` - download all packages from package-lock.json
+
+`npx @yaakovhatam/take-npm-packages -d -i` - download all packages from package-lock.json and check integrity

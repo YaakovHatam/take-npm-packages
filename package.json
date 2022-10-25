@@ -19,5 +19,8 @@
    "bugs": {
       "url": "https://github.com/YaakovHatam/take-npm-packages/issues"
    },
-   "homepage": "https://github.com/YaakovHatam/take-npm-packages#readme"
+   "homepage": "https://github.com/YaakovHatam/take-npm-packages#readme",
+   "dependencies": {
+      "yargs": "^17.6.0"
+   }
 }

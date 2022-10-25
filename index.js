@@ -1,45 +1,14 @@
 const path = require('path');
-const https = require('https');
 const crypto = require('crypto');
 const fs = require('fs');
 
 const packages = require(path.join(process.cwd(), './package-lock.json'));
 const packagesDir = path.join(process.cwd(), 'npm-packages');
-const flattedPackages = path.join(process.cwd(), 'flatten-packages.json');
+const flattedPackagesFile = path.join(process.cwd(), 'flatten-packages.json');
 
-function getAllLinks(packagesList, deps) {
-   packagesList.push(...deps.map(dep => ({ resolved: dep.resolved, integrity: dep.integrity })));
-
-   const subDeps = [].concat(...deps.map(dep => dep.dependencies ? Object.values(dep.dependencies) : []));
-
-   if (subDeps && subDeps.length > 0) {
-      getAllLinks(packagesList, subDeps)
-   }
-}
-
-function downloadFile(url, filePath) {
-   return new Promise((resolve, reject) => {
-      const request = https.get(url, function (response) {
-
-         if (response.statusCode == 302) {
-            console.log(response.statusCode + ': ' + url);
-            return downloadFile(response.headers.location, filePath);
-         }
-         if (response.statusCode == 404) {
-            return reject(response.statusCode + ': ' + url);
-         }
-
-         const file = fs.createWriteStream(filePath);
-         response.pipe(file);
-
-         file.on('finish', () => file.close());
-         file.on('error', () => fs.unlink(filePath));
-      }).end();
-
-      request.on('finish', () => resolve('downloaded'));
-      request.on('error', err => reject(err.message));
-   })
-}
+const getAllLinks = require('./src/get-all-links');
+const downloadPackages = require('./src/download-packages');
+const saveFilePath = require('./src/common').saveFilePath;
 
 function checkIntegrity(packagesList) {
    const files = fs.readdirSync(packagesDir, { withFileTypes: true }).filter(f => f.isFile()).map(f => f.name);
@@ -69,64 +38,32 @@ function checkIntegrity(packagesList) {
 
 }
 
+async function operate(args) {
+   const packagesList = getAllLinks(packages);
 
-function shuffle(array) {
-   let currentIndex = array.length, randomIndex;
+   fs.writeFileSync(flattedPackagesFile, JSON.stringify(packagesList));
+   console.log('total of', packagesList.length, 'packages');
 
-   // While there remain elements to shuffle.
-   while (currentIndex != 0) {
+   if (args.download) {
 
-      // Pick a remaining element.
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
+      if (!fs.existsSync(packagesDir)) {
+         fs.mkdirSync(packagesDir);
+      }
 
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-         array[randomIndex], array[currentIndex]];
+      const files = fs.readdirSync(packagesDir, { withFileTypes: true }).filter(f => f.isFile()).map(f => f.name);
+
+      const filteredPackagesList = packagesList
+         .map(p => p.resolved)
+         .filter(Boolean)
+         .filter(p => !files.includes(saveFilePath('', p)));
+
+      console.log('total of', filteredPackagesList.length, 'to download');
+      const res = await downloadPackages(filteredPackagesList, packagesDir);
+      console.log(res)
    }
-
-   return array;
-}
-
-function saveFilePath(packagesDir, p) {
-   if (p.indexOf('@') > -1) {
-      return path.join(packagesDir, p.split('/').find(a => a.indexOf('@') === 0) + '_' + path.basename(p))
-   } else {
-      return path.join(packagesDir, path.basename(p))
-   }
-}
-
-function operate(op) {
-   switch (op) {
-      case 1: {
-         const packagesList = [];
-         getAllLinks(packagesList, Object.values(packages.dependencies));
-         fs.writeFileSync(flattedPackages, JSON.stringify(packagesList));
-         console.log('total of', packagesList.length, 'packages');
-      }
-         break;
-      case 2: {
-         if (!fs.existsSync(packagesDir)) {
-            fs.mkdirSync(packagesDir);
-         }
-
-         const files = fs.readdirSync(packagesDir, { withFileTypes: true }).filter(f => f.isFile()).map(f => f.name);
-
-         const packagesList = require(flattedPackages)
-            .map(p => p.resolved)
-            .filter(Boolean)
-            .filter(p => !files.includes(saveFilePath('', p)));
-
-         console.log('total of', packagesList.length, 'to download');
-         Promise.all(shuffle(packagesList).map(p => downloadFile(p, saveFilePath(packagesDir, p))))
-            .then(res => console.log(res)).catch(res => console.log(res));
-      }
-         break;
-      case 3: {
-         const packagesList = require(flattedPackages).filter(p => p.integrity && p.resolved);
-         checkIntegrity(packagesList);
-      }
-         break;
+   if (args.download && args.integrity) {
+      const packagesList = packagesList.filter(p => p.integrity && p.resolved);
+      checkIntegrity(packagesList);
    }
 }
 
