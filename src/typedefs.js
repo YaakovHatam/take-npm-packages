@@ -10,8 +10,7 @@
  * @type {object}
  * @property {string} name - package name.
  * @property {string} version - package version.
- * @property {Object} packages - packages.
- * @property {Object.<string, PackageLockDependencyItem>} dependencies - dependencies.
+ * @property {Object.<string, PackageLockDependencyItem>} packages - packages.
  */
 
 /**

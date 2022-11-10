@@ -7,6 +7,8 @@ This tool is a simple script that takes a list of npm packages and installs them
 
 `npx @yaakovhatam/take-npm-packages --version` - Get the version of the tool
 
+`npx @yaakovhatam/take-npm-packages --subdeps` - List peer dependencies
+
 `npx @yaakovhatam/take-npm-packages [options]`
 - `options: download (alias: d)` - downloads the packages to the current directory
 - `options: integrity (alias: i)` - checks the integrity of the packages downloaded in the current directory

@@ -5,8 +5,11 @@ const fs = require('fs');
 const packages = require(path.join(process.cwd(), './package-lock.json'));
 const packagesDir = path.join(process.cwd(), 'npm-packages');
 const flattedPackagesFile = path.join(process.cwd(), 'flatten-packages.json');
+const subDepsPackagesFile = path.join(process.cwd(), 'subdeps.txt');
 
 const getAllLinks = require('./src/get-all-links');
+const listSubDeps = require('./src/sub-deps');
+
 const downloadPackages = require('./src/download-packages');
 const saveFilePath = require('./src/common').saveFilePath;
 
@@ -38,7 +41,7 @@ function checkIntegrity(packagesList) {
 
 }
 
-async function listPackaes() {
+async function listPackages() {
    const packagesList = getAllLinks(packages);
    fs.writeFileSync(flattedPackagesFile, JSON.stringify(packagesList));
    console.log('total of', packagesList.length, 'packages');
@@ -73,8 +76,22 @@ async function integrityCheck() {
 
 }
 
+async function listSubDependencies() {
+   function normalizeName(name) {
+      return name.replace(/\//, '_').replace(/@/g, '').replace(/\*/g, '');
+   }
+   const subDepsList = listSubDeps(packages);
+
+   fs.writeFileSync(subDepsPackagesFile,
+      Array.from(subDepsList).join(os.EOL) + os.EOL + os.EOL +
+      'npm i -f ' + (Array.from(subDepsList).map(sd => `${normalizeName(sd)}@npm:${sd}`).join(' ')));
+
+   return true;
+}
+
 module.exports = {
-   listPackaes,
+   listPackages,
    download,
-   integrityCheck
+   integrityCheck,
+   listSubDependencies
 };

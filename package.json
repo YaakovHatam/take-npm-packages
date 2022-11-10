@@ -21,6 +21,7 @@
    },
    "homepage": "https://github.com/YaakovHatam/take-npm-packages#readme",
    "dependencies": {
+      "semver": "^7.3.8",
       "yargs": "^17.6.0"
    }
 }
