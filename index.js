@@ -1,6 +1,7 @@
 const path = require('path');
 const crypto = require('crypto');
 const fs = require('fs');
+const os = require('os');
 
 const packages = require(path.join(process.cwd(), './package-lock.json'));
 const packagesDir = path.join(process.cwd(), 'npm-packages');

@@ -21,7 +21,7 @@ if (!packages) {
 }
 
 if (yargs.argv.subdeps) {
-   ops.subDeps(packages)
+   ops.listSubDependencies(packages)
       .then(() => process.exit(0)).catch(err => console.error(err));
 
 } else {
