@@ -1,7 +1,7 @@
 # take-npm-packages
 
 ## What is this?
-This tool is a simple script that takes a list of npm packages and installs them in a directory of your choice.
+This tool is a simple script that takes a list of npm packages from `package-lock.json` and downloads the original `tar.gz` files from npm regitstry to local folder. usufull for offline needs.
 
 ## Commands
 
@@ -16,6 +16,8 @@ This tool is a simple script that takes a list of npm packages and installs them
 ## Usage examples
 
 `npx @yaakovhatam/take-npm-packages` - list all packages from package-lock.json
+
+`npx @yaakovhatam/take-npm-packages --subdeps` - list peer dependencies from package-lock.json
 
 `npx @yaakovhatam/take-npm-packages -d` - download all packages from package-lock.json
 

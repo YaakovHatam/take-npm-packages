@@ -15,15 +15,16 @@ var yargs = require('yargs/yargs')(process.argv.slice(2))
 yargs.showVersion(m => console.log(`Running version ${m}`));
 
 const packages = require(path.join(process.cwd(), './package-lock.json'));
+console.log('found package-lock file: ', packages.name);
+
 if (!packages) {
    console.error('No package-lock.json file found');
    return process.exit(1)
 }
 
 if (yargs.argv.subdeps) {
-   ops.listSubDependencies(packages)
+   ops.listSubDependencies()
       .then(() => process.exit(0)).catch(err => console.error(err));
-
 } else {
    ops.listPackages()
       .then(() => yargs.argv.download ? ops.download() : null)

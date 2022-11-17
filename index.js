@@ -82,7 +82,6 @@ async function listSubDependencies() {
       return name.replace(/\//, '_').replace(/@/g, '').replace(/\*/g, '');
    }
    const subDepsList = listSubDeps(packages);
-
    fs.writeFileSync(subDepsPackagesFile,
       Array.from(subDepsList).join(os.EOL) + os.EOL + os.EOL +
       'npm i -f ' + (Array.from(subDepsList).map(sd => `${normalizeName(sd)}@npm:${sd}`).join(' ')));

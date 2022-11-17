@@ -1,5 +1,3 @@
-const fs = require('fs');
-const os = require('os');
 const semver = require('semver')
 
 const allDeps = new Set();
@@ -32,7 +30,7 @@ function findSubDeps(packagesLock) {
                         }
                     });
 
-                    if (!localPackages.length) return false;
+                    if (!localPackages.length) return true;
 
                     const currentActualVersions = localPackages.map(localPackage => localPackage[1].version);
                     const wantedVersion = version;
