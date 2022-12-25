@@ -7,11 +7,13 @@ var yargs = require('yargs/yargs')(process.argv.slice(2))
    .command('download', 'download all packages from package-lock.json')
    .command('subdeps', 'download sub dependencies (like peer deps) package-lock.json')
    .command('list', 'list all packages from package-lock.json')
-   .example('npx @yaakovhatam/take-npm-packages list', 'list all packages from package-lock.json, saved to file "list-packages.json"')
-   .example('npx @yaakovhatam/take-npm-packages list -v', 'list all packages from package-lock.json include their versions, saved to file "list-packages.json"')
-   .example('npx @yaakovhatam/take-npm-packages subdeps', 'download sub dependencies (like peer deps) package-lock.json')
-   .example('npx @yaakovhatam/take-npm-packages download', 'download all packages from package-lock.json')
-   .example('npx @yaakovhatam/take-npm-packages download -i', 'download all packages from package-lock.json and check integrity')
+   .example(
+      ['npx take-npm-packages list', 'list all packages from package-lock.json, saved to file "list-packages.json"'],
+      ['npx take-npm-packages list -v', 'list all packages from package-lock.json include their versions, saved to file "list-packages.json"'],
+      ['npx take-npm-packages subdeps', 'download sub dependencies (like peer deps) package-lock.json'],
+      ['npx take-npm-packages download', 'download all packages from package-lock.json'],
+      ['npx take-npm-packages download -i', 'download all packages from package-lock.json and check integrity']
+   )
    .alias('d', 'download')
    .alias('l', 'list')
    .alias('s', 'subdeps')
