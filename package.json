@@ -6,7 +6,9 @@
    "bin": {
       "take-npm-packages": "bin/index.js"
    },
-   "scripts": {},
+   "scripts": {
+      "install:local": "npm i -g"
+   },
    "repository": {
       "type": "git",
       "url": "git+https://github.com/YaakovHatam/take-npm-packages.git"
@@ -14,6 +16,10 @@
    "keywords": [
       "npm"
    ],
+   "engineStrict": true,
+   "engines": {
+      "npm": ">=7"
+   },
    "author": "YaakovHatam",
    "license": "MIT",
    "bugs": {
