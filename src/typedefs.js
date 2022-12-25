@@ -20,5 +20,7 @@
  * @property {string} version - package version.
  * @property {Object} resolved - the URL.
  * @property {string} integrity - the package hash.
+ * @property {Object.<string, string>} dependencies - depedendencies.
+ * @property {Object.<string, string>} peerDependencies - the package hash.
  * @property {object} requires - depedendencies.
  */

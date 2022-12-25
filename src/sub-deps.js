@@ -1,13 +1,13 @@
+/// <reference path="typedefs.js" />
+
 const semver = require('semver')
 
-const allDeps = new Set();
-const subDeps = [
+const subDepsWantedItems = [
     'peerDependencies',
     // 'peerDependenciesMeta',
-    'optionalDependencies',
+    // 'optionalDependencies',
     //'devDependencies'
 ];
-
 
 function normalizeVersion(version) {
     if (version === '*') return 'latest';
@@ -17,32 +17,36 @@ function normalizeVersion(version) {
     return major === 0 ? '0.' + minor : '' + major;
 }
 
-function findSubDeps(packagesLock) {
-    Object.values(packagesLock.packages).forEach((pkg) => subDeps.forEach((subDep) => {
-        if (pkg[subDep]) {
-            Object.entries(pkg[subDep])
-                .filter(([name, version]) => {
-                    const localPackages = Object.entries(packagesLock.packages).filter(([key, value]) => {
-                        if (value.name) {
-                            return value.name === name;
-                        } else {
-                            return key.endsWith('/' + name);
-                        }
-                    });
+/**
+ * 
+ * @param {PackageLockFile} packageLock 
+ * @returns 
+ */
+function findSubDeps(packageLock) {
+    const localPackages = Object.entries(packageLock.packages);
 
-                    if (!localPackages.length) return true;
+    return Array.from(new Set([].concat(...localPackages.map(([name, pkg]) => {
+        const subDeps = Object.assign(...subDepsWantedItems.map(sd => pkg[sd] || {}));
 
-                    const currentActualVersions = localPackages.map(localPackage => localPackage[1].version);
-                    const wantedVersion = version;
+        return Object.entries(subDeps)
+            .filter(([subdepName, subdepVersion]) => {
+                const alreadyInstalledPacakge = localPackages.filter(pkg => pkg[0] === subdepName || pkg[0].endsWith('/' + subdepName));
+                if (alreadyInstalledPacakge.length === 0) return true;
 
-                    return currentActualVersions
-                        .every(currentActualVersion => !semver.satisfies(currentActualVersion, wantedVersion));
 
-                })
-                .map(([dep, version]) => allDeps.add(`${dep}@${normalizeVersion(version)}`));
-        }
-    }));
-    return allDeps;
+                const currentActualVersions = alreadyInstalledPacakge.map(pkg => pkg[1].version);
+                const wantedVersion = subdepVersion;
+
+                return currentActualVersions
+                    .every(currentActualVersion => !semver.satisfies(currentActualVersion, wantedVersion));
+            })
+            .map(([subdepName, subdepVersion]) => {
+                return JSON.stringify({
+                    name: subdepName,
+                    version: normalizeVersion(subdepVersion)
+                });
+            });
+    })))).map(sd => JSON.parse(sd));
 }
 
 module.exports = findSubDeps;

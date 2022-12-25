@@ -22,3 +22,7 @@ This tool is a simple script that takes a list of npm packages from `package-loc
 `npx @yaakovhatam/take-npm-packages -d` - download all packages from package-lock.json
 
 `npx @yaakovhatam/take-npm-packages -d -i` - download all packages from package-lock.json and check integrity
+
+
+## Development mode
+You can use `npm link` to link your current working dir to globally installed loca npm pacakges
